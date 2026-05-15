@@ -1,0 +1,5 @@
+#Archivos que se autogenerados por el sistema operativo o por herramientas de desarrollo, que no deben ser incluidos en el control de versiones.
+.DS_Store
+Thumbs.db
+*.log
+/vendor/
