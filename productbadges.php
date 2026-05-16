@@ -28,6 +28,7 @@ class Productbadges extends Module
     public function install()
     {
         return parent::install()
+            && $this->registerHook('actionFrontControllerSetMedia')
             && $this->installTab()
             && $this->registerHook('displayProductListItem')
             && $this->registerHook('displayProductAdditionalInfo')
@@ -123,5 +124,56 @@ private function uninstallTab()
         return $tab->delete();
     }
     return true;
+}
+public function hookDisplayProductListItem($params)
+{
+    $id_product = (int) $params['product']['id_product'];
+    $badges = $this->getBadgesForProduct($id_product);
+    
+    if (empty($badges)) {
+        return '';
+    }
+
+    $this->context->smarty->assign(['badges' => $badges]);
+    return $this->display(__FILE__, 'views/templates/hook/badges.tpl');
+}
+
+public function hookDisplayProductAdditionalInfo($params)
+{
+    $id_product = (int) $params['product']['id_product'];
+    $badges = $this->getBadgesForProduct($id_product);
+
+    if (empty($badges)) {
+        return '';
+    }
+
+    $this->context->smarty->assign(['badges' => $badges]);
+    return $this->display(__FILE__, 'views/templates/hook/badges.tpl');
+}
+
+private function getBadgesForProduct($id_product)
+{
+    $id_lang = (int) $this->context->language->id_lang;
+
+    return Db::getInstance()->executeS(
+        'SELECT b.*, bl.label
+        FROM `' . _DB_PREFIX_ . 'productbadge` b
+        LEFT JOIN `' . _DB_PREFIX_ . 'productbadge_lang` bl
+            ON (b.id_badge = bl.id_badge AND bl.id_lang = ' . $id_lang . ')
+        LEFT JOIN `' . _DB_PREFIX_ . 'productbadge_product` bp
+            ON (b.id_badge = bp.id_badge)
+        WHERE bp.id_product = ' . $id_product . '
+        AND b.active = 1'
+    );
+}
+public function hookActionFrontControllerSetMedia()
+{
+    if (in_array($this->context->controller->php_self, ['index', 'category', 'search', 'product'])) {
+        $this->context->controller->registerStylesheet(
+            'productbadges-css',
+            'modules/' . $this->name . '/views/css/productbadges.css',
+            ['media' => 'all', 'priority' => 150]
+        );
+    }
 }
 }
