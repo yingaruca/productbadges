@@ -98,9 +98,8 @@ class Productbadges extends Module
 
 public function getContent()
 {
-    Tools::redirectAdmin(
-        $this->context->link->getAdminLink('AdminProductBadges')
-    );
+    $this->postProcess();
+    return $this->getConfigurationForm();
 }
 private function installTab()
 {
@@ -164,6 +163,8 @@ private function getBadgesForProduct($id_product)
             ON (b.id_badge = bp.id_badge)
         WHERE bp.id_product = ' . $id_product . '
         AND b.active = 1'
+        'AND b.active = 1
+LIMIT ' . (int) Configuration::get('PRODUCTBADGES_MAX', 3)
     );
 }
 public function hookActionFrontControllerSetMedia()
@@ -174,6 +175,76 @@ public function hookActionFrontControllerSetMedia()
             'modules/' . $this->name . '/views/css/productbadges.css',
             ['media' => 'all', 'priority' => 150]
         );
+    }
+}
+public function getConfigurationForm()
+{
+    $fields_form = [
+        'legend' => [
+            'title' => $this->l('Settings'),
+        ],
+        'input' => [
+            [
+                'type' => 'switch',
+                'label' => $this->l('Enable module'),
+                'name' => 'PRODUCTBADGES_ENABLED',
+                'values' => [
+                    ['id' => 'active_on', 'value' => 1, 'label' => $this->l('Yes')],
+                    ['id' => 'active_off', 'value' => 0, 'label' => $this->l('No')],
+                ],
+            ],
+            [
+                'type' => 'switch',
+                'label' => $this->l('Show in product lists'),
+                'name' => 'PRODUCTBADGES_SHOW_LIST',
+                'values' => [
+                    ['id' => 'list_on', 'value' => 1, 'label' => $this->l('Yes')],
+                    ['id' => 'list_off', 'value' => 0, 'label' => $this->l('No')],
+                ],
+            ],
+            [
+                'type' => 'switch',
+                'label' => $this->l('Show in product page'),
+                'name' => 'PRODUCTBADGES_SHOW_PRODUCT',
+                'values' => [
+                    ['id' => 'product_on', 'value' => 1, 'label' => $this->l('Yes')],
+                    ['id' => 'product_off', 'value' => 0, 'label' => $this->l('No')],
+                ],
+            ],
+            [
+                'type' => 'text',
+                'label' => $this->l('Max badges per product'),
+                'name' => 'PRODUCTBADGES_MAX',
+                'class' => 'fixed-width-xs',
+            ],
+        ],
+        'submit' => [
+            'title' => $this->l('Save'),
+        ],
+    ];
+
+    $helper = new HelperForm();
+    $helper->module = $this;
+    $helper->name_controller = $this->name;
+    $helper->token = Tools::getAdminTokenLite('AdminModules');
+    $helper->currentIndex = AdminController::$currentIndex . '&configure=' . $this->name;
+    $helper->default_form_language = $this->context->language->id;
+    $helper->submit_action = 'submitProductbadges';
+    $helper->fields_value['PRODUCTBADGES_ENABLED'] = Configuration::get('PRODUCTBADGES_ENABLED', 1);
+    $helper->fields_value['PRODUCTBADGES_SHOW_LIST'] = Configuration::get('PRODUCTBADGES_SHOW_LIST', 1);
+    $helper->fields_value['PRODUCTBADGES_SHOW_PRODUCT'] = Configuration::get('PRODUCTBADGES_SHOW_PRODUCT', 1);
+    $helper->fields_value['PRODUCTBADGES_MAX'] = Configuration::get('PRODUCTBADGES_MAX', 3);
+
+    return $helper->generateForm([$fields_form]);
+}
+
+public function postProcess()
+{
+    if (Tools::isSubmit('submitProductbadges')) {
+        Configuration::updateValue('PRODUCTBADGES_ENABLED', (int) Tools::getValue('PRODUCTBADGES_ENABLED'));
+        Configuration::updateValue('PRODUCTBADGES_SHOW_LIST', (int) Tools::getValue('PRODUCTBADGES_SHOW_LIST'));
+        Configuration::updateValue('PRODUCTBADGES_SHOW_PRODUCT', (int) Tools::getValue('PRODUCTBADGES_SHOW_PRODUCT'));
+        Configuration::updateValue('PRODUCTBADGES_MAX', (int) Tools::getValue('PRODUCTBADGES_MAX'));
     }
 }
 }
