@@ -9,6 +9,7 @@ class AdminProductBadgesController extends ModuleAdminController
     {
         $this->table = 'productbadge';
         $this->className = 'ProductBadge';
+        $this->identifier = 'id_badge';
         $this->lang = true;
         $this->addRowAction('edit');
         $this->addRowAction('delete');
