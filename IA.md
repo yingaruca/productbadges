@@ -74,6 +74,11 @@ Ninguno.
 - **Por qué estaba mal:** Sin registrar el hook, el CSS nunca se cargaría en el frontend aunque el método existiera
 - **Cómo lo corregiste:** Añadí && $this->registerHook('actionFrontControllerSetMedia') en install()
 
+### Error 3
+- **Qué generó la IA (mal):** getConfigurationForm() generó el array de campos con estructura incorrecta para HelperForm
+- **Por qué estaba mal:** HelperForm espera [[ 'form' => [...] ]] — con una capa extra de array. La IA generó [ 'legend' => [...] ] directamente, lo que causaba un formulario vacío sin ningún error visible en PHP
+- **Cómo lo corregiste:** Inspeccioné el HTML generado en el navegador, vi que el fieldset estaba vacío, y comparé con la documentación de HelperForm hasta encontrar la estructura correcta
+
 ## 9. Partes que NO usé IA
 
 - Revisión línea a línea de cada archivo para entender la lógica antes de continuar
@@ -84,4 +89,4 @@ Ninguno.
 
 - **¿Qué te ahorró la IA?** El tiempo de buscar documentación de PrestaShop 1.7 desde cero — especialmente la sintaxis de ObjectModel, HelperForm y el sistema de hooks
 - **¿En qué te entorpeció?** Al principio generó código sin registrar todos los hooks necesarios, lo que habría causado que el CSS no cargara
-- **¿Qué cambiaría?** Usaría context7 MCP para tener documentación oficial de PrestaShop en tiempo real y evitar posibles alucinaciones en nombres de hooks o métodosgit 
+- **¿Qué cambiaría?** Usaría context7 MCP para tener documentación oficial de PrestaShop en tiempo real y evitar posibles alucinaciones en nombres de hooks o métodos
