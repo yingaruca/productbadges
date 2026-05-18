@@ -84,4 +84,4 @@ Ninguno.
 
 - **¿Qué te ahorró la IA?** El tiempo de buscar documentación de PrestaShop 1.7 desde cero — especialmente la sintaxis de ObjectModel, HelperForm y el sistema de hooks
 - **¿En qué te entorpeció?** Al principio generó código sin registrar todos los hooks necesarios, lo que habría causado que el CSS no cargara
-- **¿Qué cambiaría?** Usaría context7 MCP para tener documentación oficial de PrestaShop en tiempo real y evitar posibles alucinaciones en nombres de hooks o métodos
+- **¿Qué cambiaría?** Usaría context7 MCP para tener documentación oficial de PrestaShop en tiempo real y evitar posibles alucinaciones en nombres de hooks o métodosgit 
