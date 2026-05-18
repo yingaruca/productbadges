@@ -16,6 +16,15 @@ Módulo para gestionar etiquetas visuales reutilizables (badges) sobre los produ
 - **CSS cargado solo donde se necesita** — mediante `hookActionFrontControllerSetMedia` y comprobando el controlador activo.
 - **Multilenguaje** — el campo `label` se guarda en tabla `_lang` separada, compatible con el sistema de idiomas de PrestaShop.
 
+## Funcionalidades implementadas
+
+- Instalación y desinstalación limpia — sin tablas huérfanas ni hooks colgados
+- CRUD completo de badges desde el back office (crear, listar, editar, eliminar)
+- Configuración global: activar/desactivar módulo, mostrar en listados, mostrar en ficha, máximo de badges por producto
+- Hooks registrados para mostrar badges en frontend (listado de categoría, ficha de producto)
+- Multilenguaje — el texto de la badge es traducible por idioma
+- Sanitización en dos capas: validación via ObjectModel + escape en plantillas Smarty
+
 ## Qué dejé fuera y por qué
 
 - **Asignación de badges a productos desde el back office** — la relación muchos a muchos (`productbadge_product`) está implementada en base de datos pero la UI para asignar badges a productos desde la ficha del producto no está completa por limitaciones de tiempo.
