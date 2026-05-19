@@ -13,7 +13,7 @@
 No se usó archivo de instrucciones a nivel proyecto. El trabajo se realizó mediante conversación directa en claude.ai sin Claude Code CLI.
 
 ### settings.json
-No aplica — no se usó Claude Code CLI.
+No aplica. No se usó Claude Code CLI.
 
 ## 3. Skills personalizadas
 Ninguna.
@@ -67,7 +67,7 @@ Ninguno.
 ### Error 1
 - **Qué generó la IA (mal):** En getBadgesForProduct(), la query concatenaba $id_product e $id_lang directamente en el SQL sin usar pSQL()
 - **Por qué estaba mal:** Aunque ambos valores se castean a int (lo que los hace seguros), la práctica recomendada en PrestaShop es usar pSQL() o consultas preparadas para cualquier valor que entre en una query
-- **Cómo lo corregiste:** Mantuve el cast a int como primera línea de defensa y lo documenté como área de mejora — en producción usaría consultas preparadas
+- **Cómo lo corregiste:** Mantuve el cast a int como primera línea de defensa y lo documenté como área de mejora, en producción usaría consultas preparadas
 
 ### Error 2
 - **Qué generó la IA (mal):** El hook actionFrontControllerSetMedia no estaba registrado en install() inicialmente
@@ -76,17 +76,17 @@ Ninguno.
 
 ### Error 3
 - **Qué generó la IA (mal):** getConfigurationForm() generó el array de campos con estructura incorrecta para HelperForm
-- **Por qué estaba mal:** HelperForm espera [[ 'form' => [...] ]] — con una capa extra de array. La IA generó [ 'legend' => [...] ] directamente, lo que causaba un formulario vacío sin ningún error visible en PHP
+- **Por qué estaba mal:** HelperForm espera [[ 'form' => [...] ]] con una capa extra de array. La IA generó [ 'legend' => [...] ] directamente, lo que causaba un formulario vacío sin ningún error visible en PHP
 - **Cómo lo corregiste:** Inspeccioné el HTML generado en el navegador, vi que el fieldset estaba vacío, y comparé con la documentación de HelperForm hasta encontrar la estructura correcta
 
 ## 9. Partes que NO usé IA
 
-- Revisión línea a línea de cada archivo para entender la lógica antes de continuar
+- Debugging del formulario vacío: Inspeccioné el HTML manualmente en el navegador para encontrar el problema
 - Decisión de estructura de tablas (separar _lang y _product en tablas propias)
-- Decisión de castear a int todos los IDs antes de usarlos en queries
+- Corrección del identifier en AdminProductBadgesController para que usara id_badge en lugar de id_productbadge
 
 ## 10. Reflexión final
 
-- **¿Qué te ahorró la IA?** El tiempo de buscar documentación de PrestaShop 1.7 desde cero — especialmente la sintaxis de ObjectModel, HelperForm y el sistema de hooks
+- **¿Qué te ahorró la IA?** El tiempo de buscar documentación de PrestaShop 1.7 desde cero, especialmente la sintaxis de ObjectModel, HelperForm y el sistema de hooks
 - **¿En qué te entorpeció?** Al principio generó código sin registrar todos los hooks necesarios, lo que habría causado que el CSS no cargara
 - **¿Qué cambiaría?** Usaría context7 MCP para tener documentación oficial de PrestaShop en tiempo real y evitar posibles alucinaciones en nombres de hooks o métodos
