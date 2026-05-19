@@ -92,19 +92,19 @@ class Productbadges extends Module
         return true;
     }
     public function autoload()
-{
+    {
     require_once dirname(__FILE__) . '/classes/ProductBadge.php';
-}
+    }
 
-public function getContent()
-{
+    public function getContent()
+    {
     $output = '';
     $this->postProcess();
     $output .= $this->getConfigurationForm();
     return $output;
-}
-private function installTab()
-{
+    }
+    private function installTab()
+    {
     $tab = new Tab();
     $tab->active = 1;
     $tab->class_name = 'AdminProductBadges';
@@ -115,7 +115,7 @@ private function installTab()
     $tab->id_parent = -1;
     $tab->module = $this->name;
     return $tab->add();
-}
+    }
 
 private function uninstallTab()
 {
